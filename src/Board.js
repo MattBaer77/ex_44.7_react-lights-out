@@ -33,24 +33,18 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard() {
-    let initialBoard = [];
+
     // TODO: create array-of-arrays of true/false values
-
-    for (let i = 0; i < nrows; i++) {
-
-      let col = []
-
-      for (let j = 0; j < ncols; j++) {
-
-        const choose = (Math.floor(Math.random()*2))
-
-        choose ? col.push(true) : col.push(false)
-
-      }
-
-      initialBoard.push(col)
-
-    }
+    let initialBoard = Array.from(
+      
+      { length:nrows },
+      () => Array.from({length:ncols},
+        ()=> {
+          const choose = (Math.floor(Math.random()*2))
+          return choose ? true : false
+        }
+      )
+    );
 
     return initialBoard;
 
@@ -88,9 +82,11 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
   
   return (
 
-    <div>
-      {board.map((row) => <div>{row.map(cell => <Cell isLit={cell}/>)}</div>)}
-    </div>
+    <table>
+      <tbody>
+      {board.map((row) => <tr>{row.map(cell => <Cell isLit={cell}/>)}</tr>)}
+      </tbody>
+    </table>
 
   )
 
