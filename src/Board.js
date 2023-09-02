@@ -52,12 +52,15 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
 
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
+  
   }
 
   function flipCellsAround(coord) {
     setBoard(oldBoard => {
-      const [y, x] = coord.split("-").map(Number);
 
+      // const [y, x] = coord.split("-").map(Number);
+      const [y, x ] = coord
+ 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
 
@@ -67,10 +70,17 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
       };
 
       // TODO: Make a (deep) copy of the oldBoard
+      const newBoard = oldBoard.map(r => r.map(c => c))
 
       // TODO: in the copy, flip this cell and the cells around it
+      flipCell(y,x, newBoard)
+      flipCell(y, (x-1), newBoard)
+      flipCell(y, (x+1), newBoard)
+      flipCell((y-1), x, newBoard)
+      flipCell((y+1), x, newBoard)
 
       // TODO: return the copy
+      return newBoard
     });
   }
 
@@ -84,7 +94,7 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
 
     <table>
       <tbody>
-      {board.map((row) => <tr>{row.map(cell => <Cell isLit={cell}/>)}</tr>)}
+      {board.map((row, rowIdx) => <tr key={`${rowIdx}`}>{row.map((cell, columnIdx) => <Cell key={`${rowIdx}-${columnIdx}`}flipCellsAroundMe={() => flipCellsAround([rowIdx, columnIdx])} isLit={cell}/>)}</tr>)}
       </tbody>
     </table>
 
