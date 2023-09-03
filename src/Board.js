@@ -27,7 +27,7 @@ import "./Board.css";
  *
  **/
 
-function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
+function Board({ nrows = 6, ncols = 6, chanceLightStartsOn = 0.25 }) {
 
   const [board, setBoard] = useState(createBoard());
 
@@ -40,8 +40,7 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
       { length:nrows },
       () => Array.from({length:ncols},
         ()=> {
-          const choose = (Math.floor(Math.random()*2))
-          return choose ? true : false
+          return (Math.random() < chanceLightStartsOn)
         }
       )
     );
@@ -50,10 +49,13 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
 
   }
 
+
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
+    return board.every(row => row.every(cell => !cell));
   
   }
+
 
   function flipCellsAround(coord) {
     setBoard(oldBoard => {
@@ -84,12 +86,16 @@ function Board({ nrows = 6, ncols = 6, chanceLightStartsOn }) {
     });
   }
 
-  // if the game is won, just show a winning msg & render nothing else
 
   // TODO
+  // if the game is won, just show a winning msg & render nothing else
+  if (hasWon()) {
+    return <div>You Win!</div>
+  }
 
+
+  // TODO
   // make table board
-  
   return (
 
     <table>
